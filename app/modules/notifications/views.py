@@ -1,8 +1,14 @@
-def send_notification_view():
-    pass
+from flask_mail import Message
+from app import mail
 
-def view_notifications_view():
-    pass
+def send_email_view(data):
+    recipient = data.get('recipient')
+    subject = data.get('subject')
+    body = data.get('body')
 
-def schedule_reminder_view():
-    pass
+    msg = Message(subject=subject, recipients=[recipient], body=body)
+    try:
+        mail.send(msg)
+        return {"message": "Correo enviado exitosamente"}
+    except Exception as e:
+        return {"error": f"Error al enviar correo: {str(e)}"}, 500
