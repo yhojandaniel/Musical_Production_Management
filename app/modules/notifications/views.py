@@ -9,6 +9,6 @@ def send_email_view(data):
     msg = Message(subject=subject, recipients=[recipient], body=body)
     try:
         mail.send(msg)
-        return {"message": "Correo enviado exitosamente"}
+        return {"message": "Correo enviado exitosamente"}, 200
     except Exception as e:
         return {"error": f"Error al enviar correo: {str(e)}"}, 500

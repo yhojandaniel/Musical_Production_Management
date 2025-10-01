@@ -1,5 +1,7 @@
+from app import db
 from app.models.user import User
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import login_user, logout_user
 
 def login_view(data):
     username = data.get('username')
@@ -7,8 +9,8 @@ def login_view(data):
 
     user = User.query.filter_by(username=username).first()
     if user and check_password_hash(user.password, password):
-        # Aquí puedes usar Flask-Login para manejar la sesión
-        return {"message": "Login exitoso", "user_id": user.iduser}
+        login_user(user)
+        return {"message": "Login exitoso", "user_id": user.iduser}, 200
     else:
         return {"error": "Credenciales inválidas"}, 401
 
@@ -16,10 +18,12 @@ def register_view(data):
     username = data.get('username')
     password = data.get('password')
 
-    user = User(username=username, password=password)
+    hashed_password = generate_password_hash(password)
+    user = User(username=username, password=hashed_password)
     user.save()
-    return {"message": "Usuario registrado", "user_id": user.iduser}
+    login_user(user)  # Opcional: loguear automáticamente al registrar
+    return {"message": "Usuario registrado", "user_id": user.iduser}, 201
 
 def logout_view():
-    # Aquí puedes usar Flask-Login para cerrar sesión
-    return {"message": "Logout exitoso"}
+    logout_user()
+    return {"message": "Logout exitoso"}, 200

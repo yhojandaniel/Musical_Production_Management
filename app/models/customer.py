@@ -12,8 +12,16 @@ class Customer(db.Model):
     # Relaciones
     sessions = db.relationship('Session', backref='customer', lazy=True)
     projects = db.relationship('Project', backref='customer', lazy=True)
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-    # ✅ Aquí van las funciones que antes estaban con `pass`
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    # Aquí van las funciones que antes estaban con `pass`
     def create_customer(self, name):
         self.customer_name = name
         db.session.add(self)

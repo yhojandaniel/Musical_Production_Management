@@ -6,5 +6,5 @@ notifications_bp = Blueprint('notifications', __name__)
 def send_email():
     from app.modules.notifications.views import send_email_view
     data = request.get_json()
-    result = send_email_view(data)
-    return jsonify(result)
+    result, status_code = send_email_view(data)
+    return jsonify(result), status_code

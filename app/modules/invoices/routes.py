@@ -6,11 +6,11 @@ invoices_bp = Blueprint('invoices', __name__)
 def create_invoice():
     from app.modules.invoices.views import create_invoice_view
     data = request.get_json()
-    result = create_invoice_view(data)
-    return jsonify(result), 201
+    result, status_code = create_invoice_view(data)
+    return jsonify(result), status_code
 
 @invoices_bp.route('/view/<int:id>', methods=['GET'])
 def view_invoice(id):
     from app.modules.invoices.views import view_invoice_view
-    result = view_invoice_view(id)
-    return jsonify(result)
+    result, status_code = view_invoice_view(id)
+    return jsonify(result), status_code
